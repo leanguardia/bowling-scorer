@@ -49,4 +49,12 @@ RSpec.describe SingleScorer do
       .to eq([10, nil, nil, nil, nil, nil, nil, nil, nil, nil])
   end
 
+  it '' do
+    @scorer.annotate(10)
+    @scorer.annotate(3)
+    @scorer.annotate(5)
+    expect(@scorer.scores)
+      .to eq([18, 8, nil, nil, nil, nil, nil, nil, nil, nil])
+  end
+
 end
