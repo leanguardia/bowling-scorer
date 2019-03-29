@@ -34,4 +34,13 @@ RSpec.describe SingleScorer do
       .to eq([10, nil, nil, nil, nil, nil, nil, nil, nil, nil])
   end
 
+  it 'calculates 16 points after a spare and falling 6 pins' do
+    @scorer.annotate(3)
+    @scorer.annotate(7)
+    @scorer.annotate(6)
+    @scorer.annotate(3)
+    expect(@scorer.scores)
+      .to eq([16, 9, nil, nil, nil, nil, nil, nil, nil, nil])
+  end
+
 end
