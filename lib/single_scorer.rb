@@ -1,17 +1,19 @@
 class SingleScorer
 
   def initialize
-    @scores = [nil] * 10    
+    @scores = [nil] * 10
+    @frames = 0
   end
   def scores
     @scores
   end
 
   def annotate(fallen_pins)
-    if @scores[0] == nil
-      @scores[0] = fallen_pins 
+    if @scores[@frames] == nil
+      @scores[@frames] = fallen_pins
     else
-      @scores[0] += fallen_pins 
+      @scores[@frames] += fallen_pins
+      @frames += 1
     end
   end
   
