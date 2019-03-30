@@ -72,7 +72,11 @@ class TenthFrame < Frame
   def to_strings
     strings = []
     is_strike? ? strings.push('X') : strings.push(@first_roll.to_s)
-    strings.push(@second_roll.to_s)
+    if @second_roll == 10 
+      strings.push('X')
+    else
+      strings.push(@second_roll.to_s)
+    end
     strings.push(@third_roll.to_s) if @third_roll
     strings
   end
