@@ -3,9 +3,13 @@ require 'single_scorer'
 RSpec.describe SingleScorer do
 
   before(:each) do
-    @scorer = SingleScorer.new
+    @scorer = SingleScorer.new('Alice')
   end
   
+  it 'belongs to a player' do
+    expect(@scorer.player_name).to eq('Alice')
+  end
+
   it 'initializes with a list of empty scores' do
     expect(@scorer.scores).to eq([])
   end
@@ -78,7 +82,7 @@ RSpec.describe SingleScorer do
   it 'calculates cummulative scores' do
     annotateAll(3,4, 5,5, 6,2, 1,2, 3,5, 3,2, 1,2, 10, 5,2, 1,0)
     expect(@scorer.scores)
-      .to eq([7, 16, 8, 3, 8, 5, 3, 17, 7, 1])
+      .to eq [7, 16, 8, 3, 8, 5, 3, 17, 7, 1]
     expect(@scorer.cumulative_scores)
       .to eq([7, 23, 31, 34, 42, 47, 50, 67, 74, 75])
   end

@@ -2,7 +2,10 @@ require 'frame'
 
 class SingleScorer
 
-  def initialize
+  attr_reader :player_name
+
+  def initialize(player_name)
+    @player_name = player_name
     @frames = []
     @current_frame = nil
   end
@@ -33,10 +36,6 @@ private
 
   def is_new_frame?
     @current_frame == nil
-  end
-
-  def frames_count
-    @frames.size
   end
 
   def previous_frame
