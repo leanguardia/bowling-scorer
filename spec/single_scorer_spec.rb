@@ -87,6 +87,13 @@ RSpec.describe SingleScorer do
       .to eq([7, 23, 31, 34, 42, 47, 50, 67, 74, 75])
   end
 
+  it 'parses rolls to list of strings' do
+    annotateAll(3,4, 5,5, 6,2, 1,2, 3,5, 3,2, 1,2, 10, 5,2, 1,0)
+    expect(@scorer.parse_rolls)
+      .to eq(['3','4', '5','/', '6','2', '1','2', '3','5',
+              '3','2', '1','2', '','X', '5','2', '1','0'])
+  end
+
 end
 
 def annotateAll(*fallen_pins_list)

@@ -24,5 +24,11 @@ class Frame
     return 10 + bonus if is_strike? || is_spare?
     @first_roll + @second_roll
   end
+
+  def to_strings
+    return ['', 'X'] if is_strike?
+    return [@first_roll.to_s, '/'] if is_spare?
+    [@first_roll.to_s, @second_roll.to_s]
+  end
   
 end

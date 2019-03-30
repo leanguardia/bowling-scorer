@@ -32,6 +32,10 @@ class SingleScorer
     scores.map { |points| sum += points }
   end
 
+  def parse_rolls
+    @frames.map { |frame| frame.to_strings }.flatten
+  end
+
 private
 
   def is_new_frame?
