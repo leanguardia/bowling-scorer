@@ -88,5 +88,22 @@ RSpec.describe SingleScorer do
     expect(@scorer.scores)
       .to eq([30, 20, 10, nil, nil, nil, nil, nil, nil, nil])
   end
+  
+  it 'calculates scores for a perfect game' do
+    @scorer.annotate(10)
+    @scorer.annotate(10)
+    @scorer.annotate(10)
+    @scorer.annotate(10)
+    @scorer.annotate(10)
+    @scorer.annotate(10)
+    @scorer.annotate(10)
+    @scorer.annotate(10)
+    @scorer.annotate(10)
+    @scorer.annotate(10)
+    @scorer.annotate(10)
+    @scorer.annotate(10)
+    expect(@scorer.scores)
+      .to eq([30, 30, 30, 30, 30, 30, 30, 30, 30, 30])
+  end
 
 end

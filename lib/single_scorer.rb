@@ -2,8 +2,6 @@ require 'frame'
 
 class SingleScorer
 
-  attr_reader :scores
-
   def initialize
     @scores = [nil] * 10
     @frames = []
@@ -21,6 +19,10 @@ class SingleScorer
       check_bonus_points
       complete_frame
     end
+  end
+
+  def scores
+    @scores.take(10)
   end
 
 private
