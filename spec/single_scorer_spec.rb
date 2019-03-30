@@ -59,6 +59,11 @@ RSpec.describe SingleScorer do
     annotateAll(10, 10, 10)
     expect(@scorer.scores).to eq([30, 20, 10])
   end
+
+  it 'calculates scores for worst game' do
+    annotateAll(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    expect(@scorer.scores).to eq([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+  end
   
   it 'calculates scores for a perfect game' do
     annotateAll(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10)
