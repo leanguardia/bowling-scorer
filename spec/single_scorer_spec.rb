@@ -108,6 +108,13 @@ RSpec.describe SingleScorer do
               '3','2', '1','2', '','X', '5','2', 'X','X','3'])
   end
 
+  it 'parses tenth frame with two strikes and extra roll' do
+    annotateAll(0,0, 9,1, 6,2, 1,2, 3,5, 3,2, 1,2, 10, 5,2, 10,10,10)
+    expect(@scorer.parse_rolls)
+      .to eq(['0','0', '9','/', '6','2', '1','2', '3','5',
+              '3','2', '1','2', '','X', '5','2', 'X','X','X'])
+  end
+
 end
 
 def annotateAll(*fallen_pins_list)

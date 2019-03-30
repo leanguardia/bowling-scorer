@@ -77,7 +77,9 @@ class TenthFrame < Frame
     else
       strings.push(@second_roll.to_s)
     end
-    strings.push(@third_roll.to_s) if @third_roll
+    if @third_roll
+      @third_roll == 10 ? strings.push('X') : strings.push(@third_roll.to_s)
+    end
     strings
   end
 end
