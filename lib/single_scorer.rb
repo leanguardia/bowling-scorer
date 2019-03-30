@@ -16,7 +16,9 @@ class SingleScorer
       if @current_frame.is_strike?
         annotate_current_frame(10)
         if last_frame
-          if last_frame.is_spare?
+          if last_frame.is_strike?
+            add_to_previous_frame(@current_frame.points)
+          elsif last_frame.is_spare?
             add_to_previous_frame(@current_frame.first_roll)
           end
         end
