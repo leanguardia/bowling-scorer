@@ -10,12 +10,13 @@ class SingleScorer
   def annotate(fallen_pins)
     if is_new_frame?
       @current_frame = Frame.new(fallen_pins)
+      check_spare_bonus
     else
       @current_frame.second_roll = fallen_pins
     end
     if @current_frame.is_complete?
-      check_bonus_points
-      complete_frame
+      check_strike_bonus
+      confirm_frame
     end
   end
 
@@ -33,28 +34,30 @@ private
     @frames.size
   end
 
-  def last_frame
+  def previous_frame
     @frames[-1]
   end
 
-  def second_last_frame
+  def second_previous_frame
     @frames[-2]
   end
 
-  def complete_frame
+  def confirm_frame
     @frames.push(@current_frame)
     @current_frame = nil
   end
 
-  def check_bonus_points
-    if last_frame
-      if last_frame.is_strike?
-        last_frame.bonus += @current_frame.points
-        if second_last_frame && second_last_frame.is_strike?
-          second_last_frame.bonus += 10
-        end
-      elsif last_frame.is_spare?
-        last_frame.bonus += @current_frame.first_roll
+  def check_spare_bonus
+    if previous_frame && previous_frame.is_spare?
+      previous_frame.bonus += @current_frame.first_roll
+    end
+  end
+  
+  def check_strike_bonus
+    if previous_frame && previous_frame.is_strike?
+      previous_frame.bonus += @current_frame.points
+      if second_previous_frame && second_previous_frame.is_strike?
+        second_previous_frame.bonus += 10
       end
     end
   end

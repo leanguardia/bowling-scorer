@@ -17,11 +17,11 @@ class Frame
   end
   
   def is_spare?
-    is_complete? && (@first_roll + @second_roll == 10)
+    is_complete? && !is_strike? && (@first_roll + @second_roll == 10)
   end
   
   def points
-    return 10 + bonus if is_strike? or is_spare?
+    return 10 + bonus if is_strike? || is_spare?
     @first_roll + @second_roll
   end
   

@@ -64,7 +64,12 @@ RSpec.describe SingleScorer do
     annotateAll(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     expect(@scorer.scores).to eq([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
   end
-  
+
+  it 'calculates scores after 10th frame spare' do
+    annotateAll(1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 3, 5, 2, 4, 1, 3, 0, 2, 8, 5)
+    expect(@scorer.scores).to eq([2, 4, 6, 8, 16, 9, 7, 5, 3, 15])
+  end
+
   it 'calculates scores for a perfect game' do
     annotateAll(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10)
     expect(@scorer.scores).to eq([30, 30, 30, 30, 30, 30, 30, 30, 30, 30])
