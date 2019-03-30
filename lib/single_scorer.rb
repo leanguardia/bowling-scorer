@@ -15,6 +15,11 @@ class SingleScorer
       @current_frame = Frame.new(fallen_pins)
       if @current_frame.is_strike?
         annotate_current_frame(10)
+        if last_frame
+          if last_frame.is_spare?
+            add_to_previous_frame(@current_frame.first_roll)
+          end
+        end
         close_frame
       end
     else
