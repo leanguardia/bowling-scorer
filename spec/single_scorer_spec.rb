@@ -72,6 +72,15 @@ RSpec.describe SingleScorer do
       .to eq([20, 10, nil, nil, nil, nil, nil, nil, nil, nil])
   end
 
+  it 'calculates 30 and 20 points on the first two frames after two strikes and a spare' do
+    @scorer.annotate(10)
+    @scorer.annotate(10)
+    @scorer.annotate(9)
+    @scorer.annotate(1)
+    expect(@scorer.scores)
+      .to eq([30, 20, 10, nil, nil, nil, nil, nil, nil, nil])
+  end
+
   it 'calculates 30 and 20 points on the first two frames after three strikes' do
     @scorer.annotate(10)
     @scorer.annotate(10)

@@ -33,6 +33,9 @@ class SingleScorer
       if last_frame
         if last_frame.is_strike?
           add_to_previous_frame(@current_frame.points)
+          if second_last_frame && second_last_frame.is_strike?
+            @scores[frames_count - 2] += 10
+          end
         elsif last_frame.is_spare?
           add_to_previous_frame(@current_frame.first_roll)
         end
