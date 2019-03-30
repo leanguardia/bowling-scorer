@@ -24,6 +24,11 @@ class SingleScorer
     @frames.map { |frame| frame.points }.take(10)
   end
 
+  def cumulative_scores
+    sum = 0
+    scores.map { |points| sum += points }
+  end
+
 private
 
   def is_new_frame?

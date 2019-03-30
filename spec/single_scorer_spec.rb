@@ -61,18 +61,26 @@ RSpec.describe SingleScorer do
   end
 
   it 'calculates scores for worst game' do
-    annotateAll(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    annotateAll(0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0)
     expect(@scorer.scores).to eq([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
   end
 
   it 'calculates scores after 10th frame spare' do
-    annotateAll(1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 3, 5, 2, 4, 1, 3, 0, 2, 8, 5)
+    annotateAll(1,1, 2,2, 3,3, 4,4, 5,5, 6,3, 5,2, 4,1, 3,0, 2,8, 5)
     expect(@scorer.scores).to eq([2, 4, 6, 8, 16, 9, 7, 5, 3, 15])
   end
 
   it 'calculates scores for a perfect game' do
     annotateAll(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10)
     expect(@scorer.scores).to eq([30, 30, 30, 30, 30, 30, 30, 30, 30, 30])
+  end
+
+  it 'calculates cummulative scores' do
+    annotateAll(3,4, 5,5, 6,2, 1,2, 3,5, 3,2, 1,2, 10, 5,2, 1,0)
+    expect(@scorer.scores)
+      .to eq([7, 16, 8, 3, 8, 5, 3, 17, 7, 1])
+    expect(@scorer.cumulative_scores)
+      .to eq([7, 23, 31, 34, 42, 47, 50, 67, 74, 75])
   end
 
 end
