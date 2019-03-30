@@ -70,12 +70,12 @@ RSpec.describe SingleScorer do
   end
 
   it 'calculates scores after 10th frame spare' do
-    annotateAll(1,1, 2,2, 3,3, 4,4, 5,5, 6,3, 5,2, 4,1, 3,0, 2,8, 5)
+    annotateAll(1,1, 2,2, 3,3, 4,4, 5,5, 6,3, 5,2, 4,1, 3,0, 2,8,5)
     expect(@scorer.scores).to eq([2, 4, 6, 8, 16, 9, 7, 5, 3, 15])
   end
 
   it 'calculates scores for a perfect game' do
-    annotateAll(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10)
+    annotateAll(10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10,10)
     expect(@scorer.scores).to eq([30, 30, 30, 30, 30, 30, 30, 30, 30, 30])
   end
 
@@ -92,6 +92,13 @@ RSpec.describe SingleScorer do
     expect(@scorer.parse_rolls)
       .to eq(['3','4', '5','/', '6','2', '1','2', '3','5',
               '3','2', '1','2', '','X', '5','2', '1','0'])
+  end
+
+  it 'parses rolls to strings' do
+    annotateAll(10, 7,3, 9,0, 10, 0,8, 8,2, 0,6, 10, 10, 10,8,1)
+    expect(@scorer.parse_rolls)
+      .to eq(['','X', '7','/', '9','0', '','X', '0','8',
+              '8','/', '0','6', '','X', '','X', 'X','8','1'])
   end
 
 end

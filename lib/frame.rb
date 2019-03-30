@@ -68,4 +68,12 @@ class TenthFrame < Frame
       Frame.new(@third_roll).verify_strike_bonus(self, nil)
     end
   end
+
+  def to_strings
+    strings = []
+    is_strike? ? strings.push('X') : strings.push(@first_roll.to_s)
+    strings.push(@second_roll.to_s)
+    strings.push(@third_roll.to_s) if @third_roll
+    strings
+  end
 end
