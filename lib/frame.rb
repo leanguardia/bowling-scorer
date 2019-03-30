@@ -1,10 +1,11 @@
 class Frame
 
-  attr_accessor :first_roll, :second_roll
+  attr_accessor :first_roll, :second_roll, :bonus
   
   def initialize(fallen_pins)
     @first_roll = fallen_pins
     @second_roll = nil
+    @bonus = 0
   end
   
   def is_complete?
@@ -20,7 +21,7 @@ class Frame
   end
   
   def points
-    return 10 if is_strike? or is_spare?
+    return 10 + bonus if is_strike? or is_spare?
     @first_roll + @second_roll
   end
   

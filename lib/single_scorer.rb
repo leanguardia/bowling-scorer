@@ -3,7 +3,6 @@ require 'frame'
 class SingleScorer
 
   def initialize
-    @scores = [nil] * 10
     @frames = []
     @current_frame = nil
   end
@@ -15,14 +14,13 @@ class SingleScorer
       @current_frame.second_roll = fallen_pins
     end
     if @current_frame.is_complete?
-      @scores[frames_count] = @current_frame.points
       check_bonus_points
       complete_frame
     end
   end
 
   def scores
-    @scores.take(10)
+    @frames.map { |frame| frame.points }.take(10)
   end
 
 private
@@ -51,12 +49,12 @@ private
   def check_bonus_points
     if last_frame
       if last_frame.is_strike?
-        @scores[frames_count - 1] += @current_frame.points
+        last_frame.bonus += @current_frame.points
         if second_last_frame && second_last_frame.is_strike?
-          @scores[frames_count - 2] += 10
+          second_last_frame.bonus += 10
         end
       elsif last_frame.is_spare?
-        @scores[frames_count - 1] += @current_frame.first_roll
+        last_frame.bonus += @current_frame.first_roll
       end
     end
   end
