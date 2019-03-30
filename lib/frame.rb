@@ -1,6 +1,6 @@
 class Frame
 
-  attr_accessor :first_roll, :second_roll, :bonus
+  attr_accessor :bonus
   
   def initialize(fallen_pins)
     @first_roll = fallen_pins
@@ -17,12 +17,32 @@ class Frame
   end
   
   def is_spare?
-    is_complete? && !is_strike? && (@first_roll + @second_roll == 10)
+    @second_roll && !is_strike? && (@first_roll + @second_roll == 10)
+  end
+
+  def add_roll(fallen_pins)
+    @second_roll = fallen_pins
+  end
+
+  def points
+    @first_roll + (@second_roll || 0)
   end
   
-  def points
-    return 10 + bonus if is_strike? || is_spare?
-    @first_roll + @second_roll
+  def total_points
+    points + bonus
+  end
+
+  def verify_spare_bonus(previous)
+    previous.bonus += @first_roll if previous && previous.is_spare?
+  end
+
+  def verify_strike_bonus(previous, second_previous)
+    if previous && previous.is_strike?
+      previous.bonus += self.points
+      if second_previous && second_previous.is_strike?
+        second_previous.bonus += 10
+      end
+    end
   end
 
   def to_strings
@@ -31,4 +51,21 @@ class Frame
     [@first_roll.to_s, @second_roll.to_s]
   end
   
+end
+
+class TenthFrame < Frame
+
+  def is_complete?
+    !is_strike? && @second_roll && !is_spare? || @third_roll
+  end
+
+  def add_roll(fallen_pins)
+    if @second_roll.nil?
+      @second_roll = fallen_pins
+    else
+      @third_roll = fallen_pins
+      Frame.new(@third_roll).verify_spare_bonus(self)
+      Frame.new(@third_roll).verify_strike_bonus(self, nil)
+    end
+  end
 end

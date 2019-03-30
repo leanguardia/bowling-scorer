@@ -12,19 +12,19 @@ class SingleScorer
 
   def annotate(fallen_pins)
     if is_new_frame?
-      @current_frame = Frame.new(fallen_pins)
-      check_spare_bonus
+      @current_frame = create_new_frame(fallen_pins)
+      @current_frame.verify_spare_bonus(previous_frame)
     else
-      @current_frame.second_roll = fallen_pins
+      @current_frame.add_roll(fallen_pins)
     end
     if @current_frame.is_complete?
-      check_strike_bonus
+      @current_frame.verify_strike_bonus(previous_frame, second_previous_frame)
       confirm_frame
     end
   end
 
   def scores
-    @frames.map { |frame| frame.points }.take(10)
+    @frames.map { |frame| frame.total_points }
   end
 
   def cumulative_scores
@@ -55,19 +55,13 @@ private
     @current_frame = nil
   end
 
-  def check_spare_bonus
-    if previous_frame && previous_frame.is_spare?
-      previous_frame.bonus += @current_frame.first_roll
+  def create_new_frame(fallen_pins)
+    if @frames.size == 9
+      new_frame = TenthFrame.new(fallen_pins)
+    elsif 
+      new_frame = Frame.new(fallen_pins)
     end
-  end
-  
-  def check_strike_bonus
-    if previous_frame && previous_frame.is_strike?
-      previous_frame.bonus += @current_frame.points
-      if second_previous_frame && second_previous_frame.is_strike?
-        second_previous_frame.bonus += 10
-      end
-    end
+    new_frame
   end
 
 end
