@@ -62,6 +62,11 @@ RSpec.describe SingleScorer do
   it 'calculates 30 and 20 points on the first two frames after three strikes' do
     annotateAll(10, 10, 10)
     expect(@scorer.scores).to eq([30, 20, 10])
+  end  
+
+  it 'calculates scores for frames with fouls' do
+    annotateAll('F',6, 3,'F', 'F','F')
+    expect(@scorer.scores).to eq([6, 3, 0])
   end
 
   it 'calculates scores for worst game' do

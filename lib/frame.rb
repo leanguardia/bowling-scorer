@@ -3,7 +3,7 @@ class Frame
   attr_accessor :bonus
   
   def initialize(fallen_pins)
-    @first_roll = fallen_pins
+    @first_roll = parse_foul(fallen_pins)
     @bonus = 0
   end
   
@@ -20,7 +20,7 @@ class Frame
   end
 
   def add_roll(fallen_pins)
-    @second_roll = fallen_pins
+    @second_roll = parse_foul(fallen_pins)
   end
 
   def points
@@ -50,8 +50,12 @@ class Frame
     [@first_roll.to_s, @second_roll.to_s]
   end
 
-  def parse_roll(roll)
+  def parse_strike(roll)
     roll == 10 ? 'X' : roll.to_s
+  end
+
+  def parse_foul(fallen_pins)
+    fallen_pins == 'F' ? 0 : fallen_pins
   end
   
 end
@@ -77,9 +81,9 @@ class TenthFrame < Frame
   end
 
   def to_strings
-    strings = [ parse_roll(@first_roll) ]
-    is_spare? ? strings.push('/') : strings.push(parse_roll(@second_roll))
-    strings.push(parse_roll(@third_roll)) if @third_roll  
+    strings = [ parse_strike(@first_roll) ]
+    is_spare? ? strings.push('/') : strings.push(parse_strike(@second_roll))
+    strings.push(parse_strike(@third_roll)) if @third_roll  
     strings
   end
 end
