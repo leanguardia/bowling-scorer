@@ -1,30 +1,32 @@
+require 'roll'
+
 class Frame
 
   attr_accessor :bonus
   
   def initialize(fallen_pins)
-    @first_roll = parse_foul(fallen_pins)
+    @rolls = [Roll.new(fallen_pins)]
     @bonus = 0
   end
   
   def is_complete?
-    @first_roll == 10 || !@second_roll.nil?
+    first_roll_pins == 10 || second_roll
   end
   
   def is_strike?
-    @first_roll == 10
+    first_roll_pins == 10
   end
   
   def is_spare?
-    @second_roll && !is_strike? && (@first_roll + @second_roll == 10)
+    second_roll && !is_strike? && (first_roll_pins + second_roll_pins == 10)
   end
 
   def add_roll(fallen_pins)
-    @second_roll = parse_foul(fallen_pins)
+    @rolls.push(Roll.new(fallen_pins))
   end
 
   def points
-    @first_roll + (@second_roll || 0)
+    first_roll_pins + second_roll_pins
   end
   
   def total_points
@@ -32,7 +34,7 @@ class Frame
   end
 
   def verify_spare_bonus(previous)
-    previous.bonus += @first_roll if previous && previous.is_spare?
+    previous.bonus += first_roll_pins if previous && previous.is_spare?
   end
 
   def verify_strike_bonus(previous, second_previous)
@@ -46,16 +48,26 @@ class Frame
 
   def to_strings
     return ['', 'X'] if is_strike?
-    return [@first_roll.to_s, '/'] if is_spare?
-    [@first_roll.to_s, @second_roll.to_s]
+    return [first_roll.to_string, '/'] if is_spare?
+    [first_roll.to_string, second_roll.to_string]
   end
 
-  def parse_strike(roll)
-    roll == 10 ? 'X' : roll.to_s
+private
+
+  def first_roll
+    @rolls[0]
   end
 
-  def parse_foul(fallen_pins)
-    fallen_pins == 'F' ? 0 : fallen_pins
+  def first_roll_pins
+    first_roll.pins
+  end
+
+  def second_roll
+    @rolls[1]
+  end
+
+  def second_roll_pins
+    second_roll ? @rolls[1].pins : 0
   end
   
 end
@@ -63,27 +75,34 @@ end
 class TenthFrame < Frame
 
   def is_complete?
-    !is_strike? && @second_roll && !is_spare? || @third_roll
+    !is_strike? && second_roll && !is_spare? || third_roll
   end
 
   def add_roll(fallen_pins)
-    if @second_roll.nil?
-      @second_roll = fallen_pins
-    else
-      @third_roll = fallen_pins
-      verify_bonuses_with_itself
-    end
-  end
-
-  def verify_bonuses_with_itself
-    Frame.new(@third_roll).verify_spare_bonus(self)
-    Frame.new(@third_roll).verify_strike_bonus(self, nil)
+    super(fallen_pins)
+    verify_bonuses_with_itself if @rolls.size == 3
   end
 
   def to_strings
-    strings = [ parse_strike(@first_roll) ]
-    is_spare? ? strings.push('/') : strings.push(parse_strike(@second_roll))
-    strings.push(parse_strike(@third_roll)) if @third_roll  
+    strings = [ first_roll.to_string ]
+    is_spare? ? strings.push('/') : strings.push(second_roll.to_string)
+    strings.push(third_roll.to_string) if third_roll
     strings
   end
+
+private
+
+  def verify_bonuses_with_itself
+    Frame.new(third_roll_pins).verify_spare_bonus(self)
+    Frame.new(third_roll_pins).verify_strike_bonus(self, nil)
+  end
+
+  def third_roll
+    @rolls[2]
+  end
+
+  def third_roll_pins
+    third_roll.pins
+  end
+
 end

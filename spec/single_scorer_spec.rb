@@ -93,10 +93,10 @@ RSpec.describe SingleScorer do
   end
 
   it 'parses rolls to list of strings' do
-    annotateAll(3,4, 5,5, 6,2, 1,2, 3,5, 0,10, 1,2, 10, 5,2, 1,0)
+    annotateAll(3,4, 5,5, 6,2, 'F',2, 3,'F', 0,10, 'F','F', 10, 5,2, 1,0)
     expect(@scorer.parse_rolls)
-      .to eq(['3','4', '5','/', '6','2', '1','2', '3','5',
-              '0','/', '1','2', '','X', '5','2', '1','0'])
+      .to eq(['3','4', '5','/', '6','2', 'F','2', '3','F',
+              '0','/', 'F','F', '','X', '5','2', '1','0'])
   end
 
   it 'parses tenth frame with a spare and extra roll' do
