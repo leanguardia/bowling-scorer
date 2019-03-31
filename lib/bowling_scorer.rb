@@ -33,7 +33,7 @@ private
   end
 
   def parse_scores_for(player)
-    @players[player].scores.reduce {|line, roll| line + "\t" + roll}
+    @players[player].scores.reduce {|line, score| line.to_s + "\t" + score.to_s }
   end
 
 end
