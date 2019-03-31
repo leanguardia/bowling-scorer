@@ -11,7 +11,16 @@ RSpec.describe BowlingScorer do
     board = "Frame\t1\t2\t3\t4\t5\t6\t7\t8\t9\t10\n"+
             "Alice\n"+
             "Pinfalls\t\n"+
-            "Score\t\n"
+            "Score\t\t\n"
+    expect(@scorer.display).to eq (board)
+  end
+
+  it 'updates pinfalls and score after a frame' do
+    @scorer.annotate('Alice', 4,5);
+    board = "Frame\t1\t2\t3\t4\t5\t6\t7\t8\t9\t10\n"+
+            "Alice\n"+
+            "Pinfalls\t4\t5\n"+
+            "Score\t\t9\n"
     expect(@scorer.display).to eq (board)
   end
 
@@ -21,13 +30,13 @@ RSpec.describe BowlingScorer do
     board = "Frame\t1\t2\t3\t4\t5\t6\t7\t8\t9\t10\n"+
             "Alice\n"+
             "Pinfalls\t\n"+
-            "Score\t\n"+
+            "Score\t\t\n"+
             "Bob\n"+
             "Pinfalls\t\n"+
-            "Score\t\n"+
+            "Score\t\t\n"+
             "Camila\n"+
             "Pinfalls\t\n"+
-            "Score\t\n"
+            "Score\t\t\n"
     expect(@scorer.display).to eq (board)
   end
     
