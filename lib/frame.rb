@@ -4,7 +4,6 @@ class Frame
   
   def initialize(fallen_pins)
     @first_roll = fallen_pins
-    @second_roll = nil
     @bonus = 0
   end
   
@@ -50,6 +49,10 @@ class Frame
     return [@first_roll.to_s, '/'] if is_spare?
     [@first_roll.to_s, @second_roll.to_s]
   end
+
+  def parse_roll(roll)
+    roll == 10 ? 'X' : roll.to_s
+  end
   
 end
 
@@ -64,22 +67,19 @@ class TenthFrame < Frame
       @second_roll = fallen_pins
     else
       @third_roll = fallen_pins
-      Frame.new(@third_roll).verify_spare_bonus(self)
-      Frame.new(@third_roll).verify_strike_bonus(self, nil)
+      verify_bonuses_with_itself
     end
   end
 
+  def verify_bonuses_with_itself
+    Frame.new(@third_roll).verify_spare_bonus(self)
+    Frame.new(@third_roll).verify_strike_bonus(self, nil)
+  end
+
   def to_strings
-    strings = []
-    is_strike? ? strings.push('X') : strings.push(@first_roll.to_s)
-    if @second_roll == 10 
-      strings.push('X')
-    else
-      strings.push(@second_roll.to_s)
-    end
-    if @third_roll
-      @third_roll == 10 ? strings.push('X') : strings.push(@third_roll.to_s)
-    end
+    strings = [ parse_roll(@first_roll) ]
+    is_spare? ? strings.push('/') : strings.push(parse_roll(@second_roll))
+    strings.push(parse_roll(@third_roll)) if @third_roll  
     strings
   end
 end
