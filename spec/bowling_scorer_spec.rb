@@ -25,21 +25,21 @@ RSpec.describe BowlingScorer do
   it 'updates board after spare and open frame' do
     @scorer.annotate('Alice', 5,5, 3,4);
     score = "Pinfalls\t5\t/\t3\t4\n"+
-            "Score\t\t13\t7\n"
+            "Score\t\t13\t20\n"
     expect( extract_score(@scorer.display) ).to eq (score)
   end
 
   it 'updates board after strike and open frame' do
     @scorer.annotate('Alice', 5,5, 3,4);
     score = "Pinfalls\t5\t/\t3\t4\n"+
-            "Score\t\t13\t7\n"
+            "Score\t\t13\t20\n"
     expect( extract_score(@scorer.display) ).to eq (score)
   end
 
   it 'updates board after fouls' do
     @scorer.annotate('Alice', 'F',5, 3,'F', 'F','F');
     score = "Pinfalls\tF\t5\t3\tF\tF\tF\n"+
-            "Score\t\t5\t3\t0\n"
+            "Score\t\t5\t8\t8\n"
     expect( extract_score(@scorer.display) ).to eq (score)
   end
 
