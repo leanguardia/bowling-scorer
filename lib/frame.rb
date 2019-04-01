@@ -1,4 +1,4 @@
-require 'roll'
+require_relative 'roll'
 
 class Frame
 

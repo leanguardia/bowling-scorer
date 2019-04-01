@@ -1,4 +1,4 @@
-require 'single_scorer'
+require_relative 'single_scorer'
 
 class BowlingScorer
 
