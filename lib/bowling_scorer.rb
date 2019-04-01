@@ -11,29 +11,39 @@ class BowlingScorer
   end
 
   def display
-    board = "Frame\t1\t2\t3\t4\t5\t6\t7\t8\t9\t10\n"
-    @players.keys.each do |player|
-      board += "#{player}\n"+
-               "Pinfalls\t#{parse_rolls_for(player)}\n"+
-               "Score\t\t#{parse_scores_for(player)}\n"
+    board = parse(data: %w[Frame 1 2 3 4 5 6 7 8 9 10], tab_number: 2)
+    players.each do |player|
+      board += player + line_break +
+            parse(data: ['Pinfalls'] + rolls_for(player), tab_number: 1) +
+            parse(data: ['Score'] + scores_for(player), tab_number: 2)
     end
     board
   end
 
+  def players
+    @players.keys
+  end
+
   def annotate(player, *fallen_pins)
-    fallen_pins.each do |pins|
-      @players[player].annotate(pins)
-    end
+    fallen_pins.each { |pins| @players[player].annotate(pins) }
   end
 
 private
 
-  def parse_rolls_for(player)
-    @players[player].parse_rolls.reduce {|line, roll| line + "\t" + roll}
+  def rolls_for(player)
+    @players[player].parse_rolls
   end
 
-  def parse_scores_for(player)
-    @players[player].cumulative_scores.reduce {|line, score| line.to_s + "\t" + score.to_s }
+  def scores_for(player)
+    @players[player].cumulative_scores.map{|s| s.to_s}
+  end
+
+  def parse(data: elements, tab_number: n = 0)
+    data.join("\t" * tab_number) + line_break
+  end
+
+  def line_break
+    "\n"
   end
 
 end

@@ -8,81 +8,94 @@ RSpec.describe BowlingScorer do
   end
 
   it 'displays empty scoreboard for one player' do
-    board = "Frame\t1\t2\t3\t4\t5\t6\t7\t8\t9\t10\n"+
+    board = join_with_tabs(2, %w[Frame 1 2 3 4 5 6 7 8 9 10]) + "\n" +
             "Alice\n"+
-            "Pinfalls\t\n"+
-            "Score\t\t\n"
+            "Pinfalls\n"+
+            "Score\n"
     expect(@scorer.display).to eq (board)
   end
 
   it 'updates board after an open frame' do
     @scorer.annotate('Alice', 4,5);
-    pinfalls = join_with_tabs("Pinfalls", "4","5\n")
-    scores =   join_with_tabs("Score\t",  "9\n")    
-    evaluate_pinfalls_and_scores(pinfalls, scores)
+    board = @scorer.display
+    expect(extract_pinfalls(board)).to eq (parse_pinfalls( "4","5"))
+    expect(extract_score(board)).to    eq (parse_scores(   "9"))
   end
 
   it 'updates board after spare and open frame' do
-    @scorer.annotate('Alice', 5,5, 3,4);
-    pinfalls = join_with_tabs("Pinfalls", "5", "/", "3", "4\n")
-    scores =   join_with_tabs("Score\t",  "13",     "20\n")
-    evaluate_pinfalls_and_scores(pinfalls, scores)
+    @scorer.annotate('Alice', 5,5, 3,4)
+    board = @scorer.display
+    expect( extract_pinfalls(board) ).to eq (parse_pinfalls( "5","/", "3","4"))
+    expect( extract_score(board) ).to    eq (parse_scores(   "13",     "20"))
   end
 
   it 'updates board after strike and open frame' do
-    @scorer.annotate('Alice', 5,5, 3,4);
-    pinfalls = join_with_tabs("Pinfalls", "5", "/", "3", "4\n")
-    scores =   join_with_tabs("Score\t",  "13",     "20\n")
-    evaluate_pinfalls_and_scores(pinfalls, scores)
+    @scorer.annotate('Alice', 5,5, 3,4)
+    board = @scorer.display
+    expect( extract_pinfalls(board) ).to eq (parse_pinfalls( "5","/", "3","4"))
+    expect( extract_score(board) ).to    eq (parse_scores(   "13",    "20"))
   end
 
   it 'updates board after fouls' do
-    @scorer.annotate('Alice', 'F',5, 3,'F', 'F','F');
-    pinfalls = join_with_tabs("Pinfalls", "F","5", "3","F", "F","F\n")
-    scores =   join_with_tabs("Score\t",  "5",     "8",     "8\n")
-    evaluate_pinfalls_and_scores(pinfalls, scores)
+    @scorer.annotate('Alice', 'F',5, 3,'F', 'F','F')
+    board = @scorer.display
+    expect( extract_pinfalls(board) ).to eq (parse_pinfalls( "F","5", "3","F", "F","F"))
+    expect( extract_score(board) ).to    eq (parse_scores(   "5",     "8",     "8"))
   end
 
   it 'updates board after complete game' do
     @scorer.annotate('Alice', 0,1, 2,3, 4,5, 6,3, 7,2, 10, 10, 'F',3, 9,0, 3,3);
-    pinfalls = join_with_tabs("Pinfalls", "0","1", "2", "3","4","5", "6","3", "7","2", "","X", "","X", "F","3", "9","0", "3","3\n")
-    scores =    join_with_tabs("Score\t", "1",     "6",     "15",    "24",    "33",    "63",   "76",   "79",    "88",    "94\n")
-    evaluate_pinfalls_and_scores(pinfalls, scores)
+    pinfalls = parse_pinfalls( "0","1", "2","3", "4","5", "6","3", "7","2", "","X", "","X", "F","3", "9","0", "3","3")
+    scores =   parse_scores(   "1",     "6",     "15",    "24",    "33",    "53",   "66",   "69",    "78",    "84")
+    board = @scorer.display
+    expect( extract_pinfalls(board) ).to eq (pinfalls)
+    expect( extract_score(board) ).to eq (scores)
   end
 
   it 'updates board after game with special tenth frame' do
     @scorer.annotate('Alice', 0,1, 2,3, 4,5, 6,4, 7,2, 10, 10, 'F',3, 9,0, 3,7,'F');
-    pinfalls = join_with_tabs("Pinfalls", "0","1", "2","3", "4","5", "6","/", "7","2", "","X", "","X", "F","3", "9","0", "3","/","F\n")
-    scores =   join_with_tabs("Score\t",  "1",     "6",     "15",    "32",    "41",    "71",   "84",   "87",    "96",    "106\n")
-    evaluate_pinfalls_and_scores(pinfalls, scores)
+    pinfalls = parse_pinfalls( "0","1", "2","3", "4","5", "6","/", "7","2", "","X", "","X", "F","3", "9","0", "3","/","F")
+    scores =   parse_scores(   "1",     "6",     "15",    "32",    "41",    "61",   "74",   "77",    "86",    "96")
+    board = @scorer.display
+    expect( extract_pinfalls(board) ).to eq (pinfalls)
+    expect( extract_score(board) ).to eq (scores)
   end
 
   it 'displays empty scoreboard for many players' do
     @scorer.add_player('Bob')
     @scorer.add_player('Camila')
-    board = "Frame\t1\t2\t3\t4\t5\t6\t7\t8\t9\t10\n"+
+    board = join_with_tabs(2, %w[Frame 1 2 3 4 5 6 7 8 9 10]) + "\n" +
             "Alice\n"+
-            "Pinfalls\t\n"+
-            "Score\t\t\n"+
+            "Pinfalls\n"+
+            "Score\n"+
             "Bob\n"+
-            "Pinfalls\t\n"+
-            "Score\t\t\n"+
+            "Pinfalls\n"+
+            "Score\n"+
             "Camila\n"+
-            "Pinfalls\t\n"+
-            "Score\t\t\n"
-    expect(board).to eq (board)
+            "Pinfalls\n"+
+            "Score\n"
+    expect(@scorer.display).to eq (board)
+  end
+  
+  it 'updates board with complete games of many players' do
+    @scorer.annotate('Alice', 0,1, 2,3, 4,5, 6,4, 7,2, 10, 10, 'F',3, 9,0, 3,7,'F');
+    @scorer.add_player('Jeff')
+    @scorer.annotate('Jeff', 10, 7,3, 9,0, 10, 0,8, 8,2, 'F',6, 10, 10, 10,8,1);
+    @scorer.add_player('John')
+    @scorer.annotate('John', 3,7, 6,3, 10, 8,1, 10, 10, 9,0, 7,3, 4,4, 10,9,0);
+    board = join_with_tabs(2, %w[Frame 1 2 3 4 5 6 7 8 9 10]) + "\n" +
+            "Alice\n"+
+            parse_pinfalls( "0","1", "2","3", "4","5", "6","/", "7","2", "","X", "","X", "F","3", "9","0", "3","/","F")+
+            parse_scores(   "1",     "6",     "15",    "32",    "41",    "61",   "74",   "77",    "86",    "96")+
+            "Jeff\n"+
+            parse_pinfalls( "","X", "7","/", "9","0", "","X", "0","8", "8","/", "F","6" ,"","X", "","X", "X","8","1")+
+            parse_scores(   "20",   "39",    "48",    "66",   "74",    "84",    "90",    "120","148","167")+
+            "John\n"+
+            parse_pinfalls( "3","/", "6","3", "","X", "8","1", "","X", "","X", "9","0" ,"7","/", "4","4", "X","9","0")+
+            parse_scores(   "16",   "25",    "44",    "53",   "82",    "101",  "110",   "124",   "132",   "151")
+    expect(@scorer.display).to eq (board)
   end
 
-end
-
-def evaluate_pinfalls_and_scores(pinfalls, scores)
-  board = @scorer.display
-  expect( extract_pinfalls(board) ).to eq (pinfalls)
-  expect( extract_score(board) ).to eq (scores)
-end
-
-def join_with_tabs(*elements)
-  elements.join("\t")
 end
 
 def extract_pinfalls(board)
@@ -99,4 +112,16 @@ end
 
 def split_lines(board)
   board.scan(/[^\n]*\n/)
+end
+
+def parse_pinfalls(*rolls_list) 
+  join_with_tabs(1, ["Pinfalls"] + rolls_list) + "\n"
+end
+
+def parse_scores(*rolls_list) 
+  join_with_tabs(2, ["Score"] + rolls_list) + "\n"
+end
+
+def join_with_tabs(tabs_number, *elements)
+  elements.join("\t" * tabs_number)
 end
