@@ -1,7 +1,9 @@
 source "https://rubygems.org"
 
-ruby '2.6.0'
-
+# Testing framework
 gem 'rspec'
-gem 'pry'
+# Test coverage reporter 
 gem 'simplecov'
+# Debugging library
+gem 'pry'
+
