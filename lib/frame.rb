@@ -41,7 +41,7 @@ class Frame
     if previous && previous.is_strike?
       previous.bonus += self.points
       if second_previous && second_previous.is_strike?
-        second_previous.bonus += 10
+        second_previous.bonus += first_roll_pins
       end
     end
   end
@@ -80,7 +80,7 @@ class TenthFrame < Frame
 
   def add_roll(fallen_pins)
     super(fallen_pins)
-    verify_bonuses_with_itself if @rolls.size == 3
+    verify_bonuses_with_itself if third_roll
   end
 
   def to_strings
