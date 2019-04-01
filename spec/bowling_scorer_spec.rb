@@ -16,35 +16,35 @@ RSpec.describe BowlingScorer do
   end
 
   it 'updates board after an open frame' do
-    @scorer.annotate('Alice', 4,5);
+    @scorer.annotate('Alice', [4,5])
     board = @scorer.display
     expect(extract_pinfalls(board)).to eq (parse_pinfalls( "4","5"))
     expect(extract_score(board)).to    eq (parse_scores(   "9"))
   end
 
   it 'updates board after spare and open frame' do
-    @scorer.annotate('Alice', 5,5, 3,4)
+    @scorer.annotate('Alice', [5,5, 3,4])
     board = @scorer.display
     expect( extract_pinfalls(board) ).to eq (parse_pinfalls( "5","/", "3","4"))
     expect( extract_score(board) ).to    eq (parse_scores(   "13",     "20"))
   end
 
   it 'updates board after strike and open frame' do
-    @scorer.annotate('Alice', 5,5, 3,4)
+    @scorer.annotate('Alice', [5,5, 3,4])
     board = @scorer.display
     expect( extract_pinfalls(board) ).to eq (parse_pinfalls( "5","/", "3","4"))
     expect( extract_score(board) ).to    eq (parse_scores(   "13",    "20"))
   end
 
   it 'updates board after fouls' do
-    @scorer.annotate('Alice', 'F',5, 3,'F', 'F','F')
+    @scorer.annotate('Alice', ['F',5, 3,'F', 'F','F'])
     board = @scorer.display
     expect( extract_pinfalls(board) ).to eq (parse_pinfalls( "F","5", "3","F", "F","F"))
     expect( extract_score(board) ).to    eq (parse_scores(   "5",     "8",     "8"))
   end
 
   it 'updates board after complete game' do
-    @scorer.annotate('Alice', 0,1, 2,3, 4,5, 6,3, 7,2, 10, 10, 'F',3, 9,0, 3,3);
+    @scorer.annotate('Alice', [0,1, 2,3, 4,5, 6,3, 7,2, 10, 10, 'F',3, 9,0, 3,3]);
     pinfalls = parse_pinfalls( "0","1", "2","3", "4","5", "6","3", "7","2", "","X", "","X", "F","3", "9","0", "3","3")
     scores =   parse_scores(   "1",     "6",     "15",    "24",    "33",    "53",   "66",   "69",    "78",    "84")
     board = @scorer.display
@@ -53,7 +53,7 @@ RSpec.describe BowlingScorer do
   end
 
   it 'updates board after game with special tenth frame' do
-    @scorer.annotate('Alice', 0,1, 2,3, 4,5, 6,4, 7,2, 10, 10, 'F',3, 9,0, 3,7,'F');
+    @scorer.annotate('Alice', [0,1, 2,3, 4,5, 6,4, 7,2, 10, 10, 'F',3, 9,0, 3,7,'F']);
     pinfalls = parse_pinfalls( "0","1", "2","3", "4","5", "6","/", "7","2", "","X", "","X", "F","3", "9","0", "3","/","F")
     scores =   parse_scores(   "1",     "6",     "15",    "32",    "41",    "61",   "74",   "77",    "86",    "96")
     board = @scorer.display
@@ -78,11 +78,11 @@ RSpec.describe BowlingScorer do
   end
   
   it 'updates board with complete games of many players' do
-    @scorer.annotate('Alice', 0,1, 2,3, 4,5, 6,4, 7,2, 10, 10, 'F',3, 9,0, 3,7,'F');
+    @scorer.annotate('Alice', [0,1, 2,3, 4,5, 6,4, 7,2, 10, 10, 'F',3, 9,0, 3,7,'F'])
     @scorer.add_player('Jeff')
-    @scorer.annotate('Jeff', 10, 7,3, 9,0, 10, 0,8, 8,2, 'F',6, 10, 10, 10,8,1);
+    @scorer.annotate('Jeff', [10, 7,3, 9,0, 10, 0,8, 8,2, 'F',6, 10, 10, 10,8,1])
     @scorer.add_player('John')
-    @scorer.annotate('John', 3,7, 6,3, 10, 8,1, 10, 10, 9,0, 7,3, 4,4, 10,9,0);
+    @scorer.annotate('John', [3,7, 6,3, 10, 8,1, 10, 10, 9,0, 7,3, 4,4, 10,9,0])
     board = join_with_tabs(2, %w[Frame 1 2 3 4 5 6 7 8 9 10]) + "\n" +
             "Alice\n"+
             parse_pinfalls( "0","1", "2","3", "4","5", "6","/", "7","2", "","X", "","X", "F","3", "9","0", "3","/","F")+

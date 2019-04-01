@@ -24,7 +24,7 @@ class BowlingScorer
     @players.keys
   end
 
-  def annotate(player, *fallen_pins)
+  def annotate(player, fallen_pins)
     fallen_pins.each { |pins| @players[player].annotate(pins) }
   end
 
