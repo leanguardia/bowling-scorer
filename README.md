@@ -1,33 +1,35 @@
 # Bowling Scorer
 
+It outputs a bowling score table by processing a text file containing list of player rolls.
+This project was built to gool Object Oriented Programming practices in Ruby. 
 
-This is an assigned mini project from Jobsity to Leandro Guardia
+![Table sample](sample_table.png)
+
+### Dependencies
+- Ruby 2.3.0+
+- Bundler 1.17.2+
+- Rubygems 3.0.1
+- RSpec 3.8 (unit tests)
+- Simplecov (coverage)
 
 ### Installation
-Make sure you have Ruby and Bundler installed.
-After unziping the compressed package.
+Bunde all dependencies.
 ```sh
 $ cd bowling-scorer
 $ bundle install
 ```
-This project was developed with:
-- Ruby 2.6.0
-- Bundler 1.17.2
-- Rubygems 3.0.1
-- RSpec 3.8 (tests)
-- Simplecov (coverage)
 
 ### Usage
 
-Once you are inside the `bowling-scorer` folder;
-passing a path of an input file is required, use the `-i` flag.
-
+In the root path, execute `generate_board.rb` and pass the path to the input file, e.g.
 ```sh
-$ ruby generate_board.rb -i input.txt
+$ ruby generate_board.rb -i games/sample.txt
 ```
-Increase your terminal width to ensure readability.
-### Input Files
-Games are loaded from `.txt` files, following the next format:
+In order to guarantee readability, increase your terminal's width.
+
+### Input File
+Plain text files `.txt` with lines following the format `<player_id num_of_bins>`.
+
 ```
 player_1 3
 player_1 7
@@ -38,14 +40,13 @@ player_2 0
 player_2 7
 ...
 ```
-This input file has one or more players that complete 10 frames in total.
+**Notes:** 
+- The file must have one or more players completing 10 frames in total.
+- `F` stands for fault
+- The project folder has sample files inside the `games` folder:
 
-The project folder has sample files inside the `games` folder:
- - sample.txt
- - perfect_worse.txt
-
-### Run tests
-All tests:
+### Run unit tests
+All suite:
   ```
   $ rspec
   ```
@@ -53,13 +54,13 @@ Specific file:
   ```
   $ rspec spec/single_scorer_spec.rb
   ```
-Add the line of code for a specific test:
+For a specific test add `:line_of_code` to the specific test file.
   ```
   $ rspec spec/single_scorer_spec.rb:9
   ```
-  Add the flag `-f d ` or `--format documentation` for a descriptive output.
+  Add the flag `-f d ` or `--format documentation` for descriptive output.
   
 ### Code coverage
-  After running all tests, a `coverage` folder will be created in the root of the project, open `index.html` in your browser to see coverage results.
+  After running all tests, a `coverage` folder is created in the root of the project. Open
+  `index.html` in your browser to see the results.
 
-**Enjoy**
